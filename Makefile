@@ -1,12 +1,13 @@
 # User source files
-#USERSRC = user/robot/umain.c
-USERSRC = user/happytest/happytest.c
+USERSRC = user/robot/umain.c
+#USERSRC = user/rfController.c
 
 # Serial port
-AVRDUDE_USERPORT ?= `ls /dev/tty.usb*`
+AVRDUDE_USERPORT ?= /dev/ttyUSB0
+#AVRDUDE_USERPORT ?= `ls /dev/tty.usb*`
 
 # Mac Users - you may need to change this to stk500 if you get an error when programming
-PROGRAMMER = stk500
+PROGRAMMER = stk500v1
 
 
 

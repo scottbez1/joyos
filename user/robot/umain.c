@@ -26,18 +26,34 @@ int clamp(int x, int min, int max) {
 // Entry point to contestant code.
 int umain (void) {
 
-    int strafe_v = 200;
+    int strafe_v = 0;
     int ROT_GAIN = 5;
 
-    float theta_desired = 90;
+    float theta_desired = 0;
     float theta_strafe = 45;
 
     while(1) {
         copy_objects();
+        if (get_time_us() - position_microtime[0] > 500000) {
+            motor_set_vel(0,0);
+            motor_set_vel(1,0);
+            motor_set_vel(2,0);
+            motor_set_vel(3,0);
+            pause(400);
+            yield();
+            continue;
+        }
 
-        theta_strafe = atan2(objects[2].y - objects[0].y, objects[2].x - objects[0].x) * 180 / M_PI;
+        int x = -(objects[0].x-1024);
+        int y = objects[0].y-1024;
 
-        float theta_head = (float)objects[0].theta * 180. / 2047.;
+        //theta_strafe = atan2(objects[2].y - objects[0].y, objects[2].x - objects[0].x) * 180 / M_PI;
+        theta_strafe = atan2(y,x) * 180 / M_PI;
+        strafe_v = clamp( (abs(x) + abs(y))/5, 0, 200);
+        theta_desired = (objects[0].theta - 512) * 0.35;
+
+
+        float theta_head = gyro_get_degrees();//(float)objects[0].theta * 180. / 2047.;
         
         float angle_error = wrap_angle(theta_head - theta_desired);
         
